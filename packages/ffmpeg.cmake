@@ -41,7 +41,6 @@ ExternalProject_Add(ffmpeg
         vapoursynth
         ${ffmpeg_uavs3d}
         ${ffmpeg_davs2}
-        rubberband
         libva
         openal-soft
     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
@@ -57,14 +56,19 @@ ExternalProject_Add(ffmpeg
         --pkg-config-flags=--static
         --enable-cross-compile
         --enable-runtime-cpudetect
-        --enable-gpl
-        --enable-version3
-        --enable-avisynth
+        # ═══ SANS LES PARTIES GPL — voir LGPL.md ═══
+        #
+        # `--enable-gpl` et `--enable-version3` sont retires. Les bibliotheques
+        # ci-dessous le sont aussi parce que le configure de FFmpeg les range
+        # dans EXTERNAL_LIBRARY_GPL_LIST et refuserait de construire sans
+        # `--enable-gpl` : avisynth, libdvdnav, libdvdread, librubberband,
+        # libx264, libx265.
+        #
+        # ⚠ x264 et x265 sont des ENCODEURS. Les decodeurs H.264 et HEVC sont
+        # natifs dans libavcodec et LGPL : on ne perd aucune lecture.
         --enable-vapoursynth
         --enable-libass
         --enable-libbluray
-        --enable-libdvdnav
-        --enable-libdvdread
         --enable-libfreetype
         --enable-libfribidi
         --enable-libfontconfig
@@ -78,11 +82,8 @@ ExternalProject_Add(ffmpeg
         --enable-libspeex
         --enable-libvorbis
         --enable-libbs2b
-        --enable-librubberband
         --enable-libvpx
         --enable-libwebp
-        --enable-libx264
-        --enable-libx265
         --enable-libaom
         --enable-libsvtav1
         --enable-libdav1d

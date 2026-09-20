@@ -12,10 +12,8 @@ ExternalProject_Add(mpv
         libjpeg
         libpng
         luajit
-        rubberband
         uchardet
         openal-soft
-        mujs
         vulkan
         shaderc
         libplacebo
@@ -41,15 +39,28 @@ ExternalProject_Add(mpv
         -Db_lto=true
         ${mpv_lto_mode}
         -Dlibmpv=true
+        # ═══ BUILD LGPL — voir LGPL.md ═══
+        #
+        # -Dgpl=false est l'option officielle de mpv : « GPL (version 2 or
+        # later) build », vraie par defaut. A false, libmpv est LGPLv2.1+.
+        # Meson ecarte alors de lui-meme les fonctions GPL (cdda, dvbin, dvda,
+        # dvdnav, jack, oss, caca, direct3d, x11) ; sur Windows la seule qui
+        # nous concerne est vo_direct3d, et EVA Pilot rend en OpenGL.
+        -Dgpl=false
+        # Et deux bibliotheques que meson ne surveille PAS, mais dont la
+        # licence ne convient pas a un logiciel proprietaire :
+        #   mujs        AGPLv3 (ou commerciale) — pire que la GPL ici
+        #   rubberband  GPLv2+ (ou commerciale) — sert au son en vitesse
+        #               variable, qu'EVA Pilot n'utilise pas
+        -Djavascript=disabled
+        -Drubberband=disabled
+        -Ddvdnav=disabled
         -Dpdf-build=enabled
         -Dlua=enabled
-        -Djavascript=enabled
         -Dsdl2-gamepad=enabled
         -Dlibarchive=enabled
         -Dlibbluray=enabled
-        -Ddvdnav=enabled
         -Duchardet=enabled
-        -Drubberband=enabled
         -Dlcms2=enabled
         -Dopenal=enabled
         -Dspirv-cross=enabled
