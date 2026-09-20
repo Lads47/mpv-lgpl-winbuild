@@ -11,8 +11,6 @@ ExternalProject_Add(ffmpeg
         libsrt
         libass
         libbluray
-        libdvdnav
-        libdvdread
         libmodplug
         libpng
         libsoxr
@@ -26,8 +24,6 @@ ExternalProject_Add(ffmpeg
         opus
         speex
         vorbis
-        x264
-        ${ffmpeg_x265}
         libxml2
         libvpl
         libopenmpt
@@ -35,6 +31,9 @@ ExternalProject_Add(ffmpeg
         libplacebo
         libzvbi
         libaribcaption
+        # ⚠ x264, x265, libdvdnav et libdvdread ne sont plus construits DU TOUT :
+        # ils n'etaient plus lies depuis le passage en LGPL, mais la chaine les
+        # compilait quand meme -- des minutes de CI pour du code qu'on refuse.
         aom
         svtav1
         dav1d
