@@ -107,8 +107,12 @@ jobs:
 
       - name: Downloading source
         run: |
-          cmake -DTARGET_ARCH=${{ env.arch }}-w64-mingw32 ${{ env.gcc_arch }} -DSINGLE_SOURCE_LOCATION=$PWD/src_packages -DRUSTUP_LOCATION=$PWD/clang_root/install_rustup -DENABLE_CCACHE=ON --fresh -G Ninja -B build_$BIT -S $PWD
-
+          # ⚠ AVANT LE `cmake`, ET C'EST TOUTE LA DIFFERENCE. Le dossier des
+          # jetons porte AUSSI les scripts qu'ExternalProject engendre
+          # (reset_head.sh...). L'effacer apres la configuration les emporte et
+          # rien ne les recree : « reset_head.sh: No such file or directory ».
+          # Efface avant, `--fresh` les rend tous.
+          #
           # Les jetons qui pretendent qu'une source est la, alors qu'elle n'y
           # est pas. Voir le commentaire du cache, plus haut.
           for prefixe in build_$BIT/packages/*-prefix; do
@@ -117,6 +121,8 @@ jobs:
               rm -rf "$prefixe/src/$nom-stamp"
             fi
           done
+
+          cmake -DTARGET_ARCH=${{ env.arch }}-w64-mingw32 ${{ env.gcc_arch }} -DSINGLE_SOURCE_LOCATION=$PWD/src_packages -DRUSTUP_LOCATION=$PWD/clang_root/install_rustup -DENABLE_CCACHE=ON --fresh -G Ninja -B build_$BIT -S $PWD
 
           ninja -C build_$BIT download || true
 
