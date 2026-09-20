@@ -74,13 +74,16 @@ jobs:
           restore-keys: |
             ${{ secrets.CACHE_VERSION }}-gcc-${{ matrix.bit }}_toolchain
 
-      - name: Loading repository cache
-        uses: actions/cache/restore@main
-        with:
-          path: src_packages
-          key: ${{ secrets.CACHE_VERSION }}-repository-${{ github.run_id }}
-          restore-keys: |
-            ${{ secrets.CACHE_VERSION }}-repository
+      # ⛔ PAS DE CACHE DE SOURCES DANS CE FORK.
+      #
+      # Le 2e passage est tombe sur « fatal: remote error: upload-pack: not our
+      # ref 3d078b52... » : le cache des sources, restaure d'un passage
+      # precedent, pointait un commit que ce depot ne connait pas. Les sources
+      # se reclonent donc a chaque fois -- quelques minutes, et un resultat qui
+      # ne depend que du code.
+      #
+      # ⚠ Le cache de la CHAINE D'OUTILS, lui, est garde : c'est la partie
+      # longue, et elle ne depend d'aucun depot amont.
 
       - name: Loading rustup cache
         uses: actions/cache/restore@main
