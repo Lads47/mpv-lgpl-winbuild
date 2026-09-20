@@ -68,7 +68,6 @@ ExternalProject_Add(mpv
         -Dspirv-cross=enabled
         -Dvulkan=enabled
         -Dvapoursynth=enabled
-        -Dsubrandr=enabled
         -Dsixel=enabled
         ${mpv_gl}
         # ⚠ CURL S'EN VA, ET AVEC LUI ngtcp2 : c'est lui qui a fait tomber le
