@@ -6,7 +6,6 @@ ExternalProject_Add(mpv
         lcms2
         libarchive
         libass
-        libdvdnav
         libdvdread
         libiconv
         libjpeg
@@ -20,7 +19,6 @@ ExternalProject_Add(mpv
         spirv-cross
         vapoursynth
         libsdl2
-        subrandr
         libsixel
     GIT_REPOSITORY https://github.com/mpv-player/mpv.git
     SOURCE_DIR ${SOURCE_LOCATION}
@@ -54,6 +52,11 @@ ExternalProject_Add(mpv
         -Djavascript=disabled
         -Drubberband=disabled
         -Ddvdnav=disabled
+        # ⚠ subrandr rend les sous-titres SRV3 et WebVTT -- ceux de YouTube.
+        # EVA Pilot n'affiche aucun sous-titre. Et il est ecrit en Rust : le
+        # desactiver retire toute une chaine d'outils de plus (le 5e passage
+        # est tombe la-dessus, « cargo: 127 », faute de rustup dans le fork).
+        -Dsubrandr=disabled
         -Dpdf-build=enabled
         -Dlua=enabled
         -Dsdl2-gamepad=enabled
