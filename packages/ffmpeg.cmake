@@ -39,7 +39,6 @@ ExternalProject_Add(ffmpeg
         dav1d
         vapoursynth
         ${ffmpeg_uavs3d}
-        ${ffmpeg_davs2}
         libva
         openal-soft
     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
@@ -86,7 +85,11 @@ ExternalProject_Add(ffmpeg
         --enable-libaom
         --enable-libsvtav1
         --enable-libdav1d
-        ${ffmpeg_davs2_cmd}
+        # ⚠ libdavs2 (decodeur AVS2) est GPL, et il arrivait par une VARIABLE :
+        # c'est pourquoi il avait echappe a la premiere lecture. C'est le
+        # configure de FFmpeg qui l'a nomme -- « libdavs2 is gpl and
+        # --enable-gpl is not specified » -- exactement comme prevu.
+        # libuavs3d, lui, n'est pas GPL : il reste.
         ${ffmpeg_uavs3d_cmd}
         --enable-libzimg
         --enable-openssl
