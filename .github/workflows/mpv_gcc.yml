@@ -139,11 +139,21 @@ jobs:
           path: logs.7z
           retention-days: 1
 
+      # EVA Pilot ne sait pas ouvrir un .7z : on depose AUSSI la DLL telle
+      # quelle, pour qu'un simple telechargement suffise.
+      - name: Copying libmpv for EVA Pilot
+        if: always()
+        run: |
+          find build_$BIT -name 'libmpv-2.dll' -exec cp -f {} release_$BIT/ \; || true
+          ls -l release_$BIT || true
+
       - name: Uploading ${{ matrix.bit }} build
         uses: actions/upload-artifact@master
         with:
           name: mpv-${{ matrix.bit }}
-          path: release_${{ matrix.bit }}/mpv-${{ env.arch }}*
+          path: |
+            release_${{ matrix.bit }}/mpv-${{ env.arch }}*
+            release_${{ matrix.bit }}/libmpv-2.dll
 
       - name: Cleaning build directory
         if: always()
