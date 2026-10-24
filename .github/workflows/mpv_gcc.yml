@@ -147,7 +147,10 @@ jobs:
       - name: Copying ffmpeg
         run: |
           hash=$(git -C src_packages/ffmpeg rev-parse --short HEAD)
-          7z a -m0=lzma2 -mx=9 -ms=on release_$BIT/ffmpeg-${{ env.arch }}${{ env.x86_64_level }}-git-$hash.7z ./build_$BIT/install/mingw/bin/ffmpeg.exe
+          7z a -m0=lzma2 -mx=9 -ms=on release_$BIT/ffmpeg-${{ env.arch }}${{ env.x86_64_level }}-git-$hash.7z ./build_$BIT/install/mingw/bin/ffmpeg.exe ./build_$BIT/install/mingw/bin/ffprobe.exe
+          # EVA Pilot livre ffmpeg.exe et ffprobe.exe tels quels : on les depose
+          # aussi a nu, comme la DLL (LGPL, meme configuration que libmpv).
+          cp -f ./build_$BIT/install/mingw/bin/ffmpeg.exe ./build_$BIT/install/mingw/bin/ffprobe.exe release_$BIT/
 
       - name: Collecting logs
         if: always()
@@ -179,6 +182,8 @@ jobs:
           path: |
             release_${{ matrix.bit }}/mpv-${{ env.arch }}*
             release_${{ matrix.bit }}/libmpv-2.dll
+            release_${{ matrix.bit }}/ffmpeg.exe
+            release_${{ matrix.bit }}/ffprobe.exe
 
       - name: Cleaning build directory
         if: always()
